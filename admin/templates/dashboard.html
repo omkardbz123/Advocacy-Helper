@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Advocacy Admin{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h1>Scraper Dashboard</h1>
+</div>
+
+<!-- Stats Section -->
+<div class="stats-grid">
+    <div class="stats-card">
+        <h3>YouTube Stats</h3>
+        <p class="stats-number">{{ stats.get('youtube', {}).get('total', 0) }}</p>
+        <div class="stats-breakdown">
+            <span class="badge friendly">Friendly: {{ stats.get('youtube', {}).get('friendly', 0) }}</span>
+            <span class="badge partial">Partial: {{ stats.get('youtube', {}).get('partial', 0) }}</span>
+            <span class="badge not-friendly">Not Friendly: {{ stats.get('youtube', {}).get('not_friendly', 0) }}</span>
+        </div>
+    </div>
+    
+    <div class="stats-card">
+        <h3>Instagram Stats</h3>
+        <p class="stats-number">{{ stats.get('instagram', {}).get('total', 0) }}</p>
+        <div class="stats-breakdown">
+            <span class="badge friendly">Friendly: {{ stats.get('instagram', {}).get('friendly', 0) }}</span>
+            <span class="badge partial">Partial: {{ stats.get('instagram', {}).get('partial', 0) }}</span>
+            <span class="badge not-friendly">Not Friendly: {{ stats.get('instagram', {}).get('not_friendly', 0) }}</span>
+        </div>
+    </div>
+</div>
+
+<!-- Controls Section -->
+<div class="control-panel">
+    <h2>Scraper Controls</h2>
+    <div class="control-form">
+        <div class="form-group inline">
+            <label for="platform-select">Platform</label>
+            <select id="platform-select">
+                <option value="youtube">YouTube</option>
+                <option value="instagram">Instagram</option>
+            </select>
+        </div>
+        
+        <div class="form-group inline">
+            <label for="grader-select">Gemini Mode</label>
+            <select id="grader-select">
+                <option value="api">Gemini API (Free Tier)</option>
+                <option value="browser">Browser Automation (Manually Logged In)</option>
+            </select>
+        </div>
+        
+        <button id="start-btn" class="btn btn-success">🟢 Start Scraping</button>
+        <button id="stop-btn" class="btn btn-danger" style="display: none;">🔴 Stop Scraping</button>
+    </div>
+    
+    <div class="status-box">
+        <span class="status-label">Status:</span>
+        <span id="status-indicator" class="status-val stopped">Stopped</span>
+        <span id="query-indicator" class="status-val query" style="display:none;">-</span>
+    </div>
+</div>
+
+<!-- Live Log Feed -->
+<div class="log-panel">
+    <h2>Live Activity Log</h2>
+    <div id="log-container" class="log-container">
+        <div class="log-placeholder">Scraper is idle. Logs will appear here in real time when started.</div>
+    </div>
+</div>
+{% endblock %}

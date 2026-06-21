@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Search History - Advocacy Admin{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <h1>MiniMax Search Strategy History</h1>
+</div>
+
+<div class="table-container">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Platform</th>
+                <th>Search Query</th>
+                <th>Total Found</th>
+                <th>Relevant Discovered</th>
+                <th>Irrelevant Skipped</th>
+                <th>Strategy & Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in history %}
+            <tr>
+                <td>{{ entry.created_at }}</td>
+                <td>
+                    <span class="platform-badge {{ entry.platform }}">{{ entry.platform | capitalize }}</span>
+                </td>
+                <td class="query-text">
+                    {% if entry.platform == 'instagram' %}#{{ entry.search_query }}{% else %}"{{ entry.search_query }}"{% endif %}
+                </td>
+                <td>{{ entry.total_results }}</td>
+                <td class="text-success">{{ entry.relevant_count }}</td>
+                <td class="text-warning">{{ entry.irrelevant_count }}</td>
+                <td class="strategy-notes">{{ entry.strategy_notes }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="7" class="text-center">No search history recorded. The strategy history will build up as the scraper adapts query targets.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

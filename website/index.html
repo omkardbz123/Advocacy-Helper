@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    <title>Animal Advocacy Monitor</title>
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=3">
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-container">
+            <h1 class="logo">🌿 Animal Advocacy Monitor</h1>
+            <p class="subtitle">AI-Graded Content Discovery and Critical Assessment</p>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <!-- Platform Navigation -->
+        <nav class="platform-tabs" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <div>
+                <button id="yt-tab-btn" class="tab-btn active" onclick="switchPlatform('youtube')">▶️ YouTube</button>
+                <button id="ig-tab-btn" class="tab-btn" onclick="switchPlatform('instagram')">📷 Instagram</button>
+            </div>
+            <button class="btn btn-primary" onclick="openSuggestModal()" style="margin-right: 1rem; padding: 0.5rem 1rem; border-radius: 8px; background: var(--accent-color, #4CAF50); color: white; border: none; font-weight: 600; cursor: pointer;">+ Suggest a Video</button>
+        </nav>
+
+        <!-- Stats Overview Banner -->
+        <section class="stats-banner">
+            <div class="stats-item">
+                <span class="stats-label">Total Graded:</span>
+                <span id="stats-total" class="stats-value">0</span>
+            </div>
+            <div class="stats-item">
+                <span class="stats-label">Friendly:</span>
+                <span id="stats-friendly" class="stats-value friendly">0</span>
+            </div>
+            <div class="stats-item">
+                <span class="stats-label">Partial:</span>
+                <span id="stats-partial" class="stats-value partial">0</span>
+            </div>
+            <div class="stats-item">
+                <span class="stats-label">Not Friendly:</span>
+                <span id="stats-not-friendly" class="stats-value not-friendly">0</span>
+            </div>
+        </section>
+
+        <!-- Search and Filter Controls -->
+        <section class="search-filter-container">
+            <div class="search-row">
+                <div class="search-wrapper">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="search-input" placeholder="Search by title, summary, or creator..." oninput="handleSearch()">
+                    <button id="search-clear-btn" onclick="clearSearch()" style="display: none;">×</button>
+                </div>
+                <button id="yt-filter-toggle-btn" class="yt-filter-toggle-btn" onclick="toggleYtFilterPanel()">
+                    <svg class="yt-filter-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-8v2h6V5h-6z"/></svg>
+                    <span>Filters</span>
+                </button>
+            </div>
+
+            <!-- Dropdown Filter Panel based on Database Schema -->
+            <div id="yt-filter-panel" class="yt-filter-panel" style="display: none;">
+                <div class="yt-filter-columns">
+                    <!-- Column 1: Upload Date -->
+                    <div class="yt-filter-column">
+                        <h4 class="yt-filter-title">Upload Date</h4>
+                        <ul class="yt-filter-list">
+                            <li><button class="yt-filter-item active" data-group="date" data-value="any" onclick="setYtFilter('date', 'any', this)">Any time</button></li>
+                            <li><button class="yt-filter-item" data-group="date" data-value="today" onclick="setYtFilter('date', 'today', this)">Today</button></li>
+                            <li><button class="yt-filter-item" data-group="date" data-value="week" onclick="setYtFilter('date', 'week', this)">This week</button></li>
+                            <li><button class="yt-filter-item" data-group="date" data-value="month" onclick="setYtFilter('date', 'month', this)">This month</button></li>
+                            <li><button class="yt-filter-item" data-group="date" data-value="year" onclick="setYtFilter('date', 'year', this)">This year</button></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Column 2: Scientific Grade -->
+                    <div class="yt-filter-column">
+                        <h4 class="yt-filter-title">Scientific Grade</h4>
+                        <ul class="yt-filter-list">
+                            <li><button class="yt-filter-item active" data-group="scientific" data-value="any" onclick="setYtFilter('scientific', 'any', this)">Any Grade</button></li>
+                            <li><button class="yt-filter-item" data-group="scientific" data-value="accurate" onclick="setYtFilter('scientific', 'accurate', this)">🔬 Accurate</button></li>
+                            <li><button class="yt-filter-item" data-group="scientific" data-value="partial" onclick="setYtFilter('scientific', 'partial', this)">🔬 Partial</button></li>
+                            <li><button class="yt-filter-item" data-group="scientific" data-value="inaccurate" onclick="setYtFilter('scientific', 'inaccurate', this)">🔬 Inaccurate</button></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Column 3: Emotional Manipulation -->
+                    <div class="yt-filter-column">
+                        <h4 class="yt-filter-title">Manipulation</h4>
+                        <ul class="yt-filter-list">
+                            <li><button class="yt-filter-item active" data-group="manipulation" data-value="any" onclick="setYtFilter('manipulation', 'any', this)">Any Tone</button></li>
+                            <li><button class="yt-filter-item" data-group="manipulation" data-value="yes" onclick="setYtFilter('manipulation', 'yes', this)">😢 Manipulative</button></li>
+                            <li><button class="yt-filter-item" data-group="manipulation" data-value="no" onclick="setYtFilter('manipulation', 'no', this)">⚖️ Factual / Neutral</button></li>
+                        </ul>
+                    </div>
+
+                    <!-- Column 4: Grading Method -->
+                    <div class="yt-filter-column">
+                        <h4 class="yt-filter-title">Grading Method</h4>
+                        <ul class="yt-filter-list">
+                            <li><button class="yt-filter-item active" data-group="method" data-value="any" onclick="setYtFilter('method', 'any', this)">Any Method</button></li>
+                            <li><button class="yt-filter-item" data-group="method" data-value="api" onclick="setYtFilter('method', 'api', this)">🤖 Gemini API</button></li>
+                            <li><button class="yt-filter-item" data-group="method" data-value="browser" onclick="setYtFilter('method', 'browser', this)">🌐 Browser Autom.</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filters">
+                <button class="filter-btn active" id="filter-all-btn" onclick="setFilter(null)">All Grades</button>
+                <button class="filter-btn" id="filter-friendly-btn" onclick="setFilter('friendly')">🟢 Friendly</button>
+                <button class="filter-btn" id="filter-partial-btn" onclick="setFilter('partial')">🔵 Partial</button>
+                <button class="filter-btn" id="filter-notfriendly-btn" onclick="setFilter('not_friendly')">🔴 Not Friendly</button>
+            </div>
+        </section>
+
+        <!-- Content Feed Grid -->
+        <section class="feed-section">
+            <div id="content-grid" class="content-grid">
+                <!-- Cards will render here -->
+                <div class="feed-placeholder">Loading discovered posts...</div>
+            </div>
+        </section>
+
+        <!-- Pagination -->
+        <section class="pagination-section">
+            <button id="load-more-btn" class="btn load-more-btn" onclick="loadMore()" style="display:none;">Load More Content</button>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <p>© 2026 Animal Advocacy Helper • AI-Graded Discovery Pipeline</p>
+    </footer>
+
+    <!-- Suggest Video Modal -->
+    <div id="suggest-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content" style="background: var(--surface-light, #252530); padding: 2rem; border-radius: 12px; width: 90%; max-width: 400px; margin: auto; margin-top: 10vh; color: white; position: relative;">
+            <button onclick="closeSuggestModal()" style="position: absolute; right: 1rem; top: 1rem; background: none; border: none; color: #888; font-size: 1.5rem; cursor: pointer;">&times;</button>
+            <h2 style="margin-top: 0; margin-bottom: 1.5rem;">Suggest a Video</h2>
+            <p style="color: #bbb; margin-bottom: 1rem; font-size: 0.9rem;">Submit a YouTube or Instagram video to be AI-graded.</p>
+            <form id="suggest-form" onsubmit="submitVideoSuggestion(event)">
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Platform</label>
+                    <select id="suggest-platform" style="width: 100%; padding: 0.75rem; border-radius: 6px; background: #1a1a22; border: 1px solid #333; color: white;">
+                        <option value="youtube">YouTube</option>
+                        <option value="instagram">Instagram</option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Video URL</label>
+                    <input type="url" id="suggest-url" required placeholder="https://..." style="width: 100%; padding: 0.75rem; border-radius: 6px; background: #1a1a22; border: 1px solid #333; color: white; box-sizing: border-box;">
+                </div>
+                <button type="submit" id="suggest-submit-btn" style="width: 100%; padding: 0.75rem; border-radius: 8px; background: var(--accent-color, #4CAF50); color: white; border: none; font-weight: 600; cursor: pointer;">Submit to Queue</button>
+            </form>
+            <div id="suggest-feedback" style="margin-top: 1rem; display: none; padding: 0.75rem; border-radius: 6px; font-size: 0.9rem;"></div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="app.js?v=4"></script>
+</body>
+</html>

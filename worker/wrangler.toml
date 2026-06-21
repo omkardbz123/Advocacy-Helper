@@ -1,0 +1,12 @@
+name = "advocacy-helper-api"
+main = "src/index.js"
+compatibility_date = "2025-06-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "advocacy-helper-db"
+database_id = "82ae25a6-0a91-412a-8d74-430ff0131e0b"
+
+[[kv_namespaces]]
+binding = "THUMBNAILS"
+id = "58ef98cf544a432ea15c4fc7bea101a8"

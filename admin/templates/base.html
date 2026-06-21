@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    <title>{% block title %}Advocacy Helper Admin{% endblock %}</title>
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    {% if current_user.is_authenticated %}
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3>Advocacy Admin</h3>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('dashboard') }}" class="{% if request.path == '/' %}active{% endif %}">📊 Dashboard</a></li>
+            <li><a href="{{ url_for('youtube_list') }}" class="{% if request.path == '/youtube' %}active{% endif %}">▶️ YouTube</a></li>
+            <li><a href="{{ url_for('instagram_list') }}" class="{% if request.path == '/instagram' %}active{% endif %}">📷 Instagram</a></li>
+            <li><a href="{{ url_for('search_history') }}" class="{% if request.path == '/search-history' %}active{% endif %}">🔍 Search History</a></li>
+            <li><a href="{{ url_for('settings') }}" class="{% if request.path == '/settings' %}active{% endif %}">⚙️ Settings</a></li>
+            <li class="logout-item"><a href="{{ url_for('logout') }}">🚪 Logout</a></li>
+        </ul>
+    </div>
+    {% endif %}
+
+    <div class="main-content {% if not current_user.is_authenticated %}full-width{% endif %}">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, msg in messages %}
+                        <div class="flash-message {{ category }}">{{ msg }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Socket.IO and Admin JS -->
+    {% if current_user.is_authenticated %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="{{ url_for('static', filename='admin.js') }}?v=4"></script>
+    {% endif %}
+</body>
+</html>

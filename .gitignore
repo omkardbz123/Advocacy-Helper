@@ -1,0 +1,8 @@
+.env
+__pycache__/
+*.pyc
+temp_media/*
+!temp_media/.gitkeep
+node_modules/
+.wrangler/
+playwright_session/

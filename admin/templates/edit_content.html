@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Content - Advocacy Admin{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <h1>Edit Graded Content ({{ platform | capitalize }})</h1>
+</div>
+
+<div class="edit-container">
+    <div class="edit-card">
+        <form method="POST">
+            <div class="form-group">
+                <label for="title">Title / Caption</label>
+                <input type="text" id="title" name="title" value="{{ item.title }}" required>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group col-4">
+                    <label for="grade_animal_friendly">Animal Friendly Grade</label>
+                    <select id="grade_animal_friendly" name="grade_animal_friendly">
+                        <option value="friendly" {% if item.grade_animal_friendly == 'friendly' %}selected{% endif %}>🟢 Friendly</option>
+                        <option value="partial" {% if item.grade_animal_friendly == 'partial' %}selected{% endif %}>🔵 Partial</option>
+                        <option value="not_friendly" {% if item.grade_animal_friendly == 'not_friendly' %}selected{% endif %}>🔴 Not Friendly</option>
+                    </select>
+                </div>
+                
+                <div class="form-group col-4">
+                    <label for="grade_scientific">Scientific Accuracy</label>
+                    <select id="grade_scientific" name="grade_scientific">
+                        <option value="accurate" {% if item.grade_scientific == 'accurate' %}selected{% endif %}>Accurate</option>
+                        <option value="partial" {% if item.grade_scientific == 'partial' %}selected{% endif %}>Partial</option>
+                        <option value="inaccurate" {% if item.grade_scientific == 'inaccurate' %}selected{% endif %}>Inaccurate</option>
+                    </select>
+                </div>
+                
+                <div class="form-group col-4">
+                    <label for="grade_emotional_manipulation">Emotional Manipulation</label>
+                    <select id="grade_emotional_manipulation" name="grade_emotional_manipulation">
+                        <option value="yes" {% if item.grade_emotional_manipulation == 'yes' %}selected{% endif %}>Yes (Manipulative)</option>
+                        <option value="no" {% if item.grade_emotional_manipulation == 'no' %}selected{% endif %}>No (Factual)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group col-6">
+                    <label for="status">Review Status</label>
+                    <select id="status" name="status">
+                        <option value="graded" {% if item.status == 'graded' %}selected{% endif %}>Graded (Public)</option>
+                        <option value="skipped" {% if item.status == 'skipped' %}selected{% endif %}>Skipped (Hidden)</option>
+                        <option value="error" {% if item.status == 'error' %}selected{% endif %}>Error</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="summary">AI Assessment Summary (3-4 lines)</label>
+                <textarea id="summary" name="summary" rows="5" required>{{ item.summary }}</textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a href="{{ url_for(platform + '_list') }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

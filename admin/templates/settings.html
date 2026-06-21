@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Settings - Advocacy Admin{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <h1>Configuration Settings</h1>
+</div>
+
+<div class="settings-container">
+    <div class="settings-card">
+        <form method="POST" action="{{ url_for('settings') }}">
+            
+            <div class="settings-section">
+                <h3>🔑 AI & API Configurations</h3>
+                
+                <div class="form-group">
+                    <label for="youtube_api_key">YouTube Data API v3 Key</label>
+                    <input type="password" id="youtube_api_key" name="youtube_api_key" value="{{ config.YOUTUBE_API_KEY }}" placeholder="AIzaSy...">
+                </div>
+
+                <div class="form-group">
+                    <label for="gemini_api_key">Google Gemini API Key</label>
+                    <input type="password" id="gemini_api_key" name="gemini_api_key" value="{{ config.GEMINI_API_KEY }}" placeholder="AIzaSy...">
+                </div>
+
+                <div class="form-group">
+                    <label for="nvidia_api_key">NVIDIA NIM (MiniMax) API Key</label>
+                    <input type="password" id="nvidia_api_key" name="nvidia_api_key" value="{{ config.NVIDIA_API_KEY }}" placeholder="nvapi-...">
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>📷 Instagram Account Credentials</h3>
+                <p class="section-desc">Required if running Instagram scraping session.</p>
+                
+                <div class="form-row">
+                    <div class="form-group col-6">
+                        <label for="instagram_username">Instagram Username</label>
+                        <input type="text" id="instagram_username" name="instagram_username" value="{{ config.INSTAGRAM_USERNAME }}" placeholder="username">
+                    </div>
+                    <div class="form-group col-6">
+                        <label for="instagram_password">Instagram Password</label>
+                        <input type="password" id="instagram_password" name="instagram_password" value="{{ config.INSTAGRAM_PASSWORD }}" placeholder="password">
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>☁️ Cloudflare Integration</h3>
+                
+                <div class="form-group">
+                    <label for="cloudflare_worker_url">Worker URL</label>
+                    <input type="text" id="cloudflare_worker_url" name="cloudflare_worker_url" value="{{ config.CLOUDFLARE_WORKER_URL }}" placeholder="https://your-worker.your-subdomain.workers.dev">
+                </div>
+
+                <div class="form-group">
+                    <label for="cloudflare_api_secret">Worker Secret Auth Key (X-API-Secret)</label>
+                    <input type="password" id="cloudflare_api_secret" name="cloudflare_api_secret" value="{{ config.CLOUDFLARE_API_SECRET }}" placeholder="secret key string">
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>🛡️ Admin Login Credentials</h3>
+                
+                <div class="form-row">
+                    <div class="form-group col-6">
+                        <label for="admin_username">Admin Username</label>
+                        <input type="text" id="admin_username" name="admin_username" value="{{ config.ADMIN_USERNAME }}" required>
+                    </div>
+                    <div class="form-group col-6">
+                        <label for="admin_password">Admin Password</label>
+                        <input type="password" id="admin_password" name="admin_password" value="{{ config.ADMIN_PASSWORD }}" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save Settings</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,3 +1,7 @@
+// Immediately set theme to avoid flashing during page load
+const savedTheme = localStorage.getItem('theme') || 'dark';
+document.documentElement.setAttribute('data-theme', savedTheme);
+
 let WORKER_URL = 'https://advocacy-helper-api.omkardbz123.workers.dev';
 
 // Auto-detect local worker for easy testing (only if requested via query parameter)
@@ -129,9 +133,6 @@ function decodeHTMLEntities(text) {
 // Create Card DOM element
 // Create Card DOM element
 function createCard(item) {
-    const card = document.createElement('article');
-    card.className = 'social-card';
-    
     // Check animal friendly grade for badge styling
     let gradeText = 'Animal Friendly';
     let gradeClass = 'friendly';
@@ -145,6 +146,9 @@ function createCard(item) {
         gradeClass = 'not_friendly';
         gradeIcon = '🔴';
     }
+
+    const card = document.createElement('article');
+    card.className = `social-card card-${gradeClass}`;
 
     const relativeTime = formatRelativeTime(item.published_at || item.created_at);
     const mediaUrl = item.video_url || item.post_url;
@@ -434,6 +438,17 @@ async function loadMore() {
 
 // Init execution
 document.addEventListener('DOMContentLoaded', async () => {
+    // Setup theme toggle button click handler
+    const toggleBtn = document.getElementById('theme-toggle-btn');
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+    }
+    
     await fetchStats();
     await loadFeed(true);
 });
